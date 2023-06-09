@@ -6,13 +6,20 @@ RUN apt-get update && apt-get install -y curl dnsutils wget vim
 # Install Java 20
 RUN apt-get install -y openjdk-17-jdk
 
+#Install Azure CLI
+RUN curl -sL https://aka.ms/InstallAzureCLIDeb | bash
+
 # Set Java environment variables
 ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
 ENV PATH=$JAVA_HOME/bin:$PATH
 
+# Install Python and required modules
+RUN apt-get install -y python3 python3-pip
+RUN pip3 install azure-storage-blob azure-identity azure-keyvault-keys snowflake-connector-python
+
 #Set Proxy and No_Proxy
 #ENV https_proxy=http://proxy.example.com:8080
-#ENV no_proxy=localhost,127.0.0.1
+#ENV no_proxy=localhost,127.0.0.1,.snowflakecomputing.com
 
 # Add CA certificates
 COPY ca-certificates.crt /usr/local/share/ca-certificates/
