@@ -61,6 +61,9 @@ WORKDIR /home
 
 EXPOSE 8083
 
+RUN curl -LJO "https://mvnrepository.com/artifact/net.snowflake/snowflake-jdbc/latest/snowflake-jdbc-latest.jar"
+RUN mkdir -p /usr/local/snowflake
+RUN mv snowflake-jdbc-latest.jar /usr/local/snowflake/snowflake-jdbc.jar
 # copy ccloud.properties file, connect-distributed.properties file, jar files (snowflake-jdbc.jar, azure-io.lenses.jar)
 # run cmd /usr/local/confluent-7.3.2/bin/connect-distributed /usr/local/confluent-7.3.2/etc/kafka/connect-distributed.properties
 # copy private.pem key and snowflake-source.json file at home location and open 2 terminal 1 for kafka connect instance and another for running curl cmd
