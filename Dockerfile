@@ -82,6 +82,13 @@ RUN mkdir -p /usr/local/confluent-7.3.2/share/confluent-hub-components
 # Copy confluent-hub-components folder
 COPY confluent-hub-components /usr/local/confluent-7.3.2/share/confluent-hub-components
 
+
+RUN keytool -genkey -alias mytruststore -keyalg RSA -keystore /path/to/mytruststore.jks
+COPY my-certificate.crt /path/to/my-certificate.crt
+RUN keytool -importcert -alias mycert -file /path/to/my-certificate.crt -keystore /path/to/mytruststore.jks -storepass mytruststorepassword
+ENV JAVA_OPTS="-Djavax.net.ssl.trustStore=/path/to/mytruststore.jks -Djavax.net.ssl.trustStorePassword=mytruststorepassword -Djavax.net.ssl.trustStoreType=jks"
+
+
 # Start Kafka Connect and curl in separate terminals
 #CMD ["bash", "-c", "/usr/local/confluent-7.3.2/bin/connect-distributed /usr/local/confluent-7.3.2/etc/kafka/connect-distributed.properties & bash"]
 CMD ["/bin/bash", "-c", "(/usr/local/confluent-7.3.2/bin/connect-distributed /usr/local/confluent-7.3.2/etc/kafka/connect-distributed.properties &); /bin/bash"]
